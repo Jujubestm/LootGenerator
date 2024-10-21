@@ -11,6 +11,5 @@ Only copy the folder LootGenerator into your machine then
 make
 
 Now you can do
-~/LootGenerator.exe 
-to run 
-(don't get fool by .exe it's for naming symbolic link purpose)
+the exec is under path/to/LootGenerator/bin/<framework>/<arch>/LootGenerator
+example: ./bin/net8.0/linux-x64/LootGenerator
