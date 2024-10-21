@@ -11,5 +11,5 @@ internal class Gold
     public double Amount { get; set; }
 
     public override string ToString()
-    { return Amount + "gp"; }
+    { return Amount + " gp"; }
 }
