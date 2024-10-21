@@ -125,10 +125,11 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
             Console.Write("-");
         }
 
-        Console.SetCursorPosition(55, 1);
-        Console.Write("Loot Generator");
-        Console.SetCursorPosition(50, 28);
-        Console.Write("Created by: Jujubestm");
+        Console.SetCursorPosition(50, 1);
+        Console.Write("Loot Generator by Jujubestm");
+        Console.SetCursorPosition(4, 28);
+        Console.Write("ArrowUp : UP | ArrowDown : DOWN | Enter : OK | Backspace : BACK");
+
         Console.SetCursorPosition(maxWidth - 40, minWidth - 2);
         for (var i = 0; i < maxHeight + 2; i++)
         {

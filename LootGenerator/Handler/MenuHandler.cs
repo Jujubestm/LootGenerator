@@ -17,7 +17,7 @@ internal class MenuHandler() : IMenuHandler
         {
             while (true)
             {
-                KeyPress?.Invoke(this, Console.ReadKey().Key);
+                KeyPress?.Invoke(this, Console.ReadKey(true).Key);
             }
         });
     }
