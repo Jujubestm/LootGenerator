@@ -25,6 +25,11 @@ internal static class Program
 
         await host.StopAsync();
 
+        for (int i = 0; i < 120; i++)
+        {
+            Console.WriteLine();
+        }
+
         Environment.Exit(0);
     }
 }
