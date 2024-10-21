@@ -16,7 +16,7 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
     private readonly ILootHandler _lootHandler = lootHandler;
     private readonly IMenuHandler _menuHandler = menuHandler;
     private ConsoleKey _key;
-    private MenuStates _menuStates;
+    private MenuStates? _menuStates;
 
     private enum Menu
     {
@@ -45,7 +45,6 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
     private const int curX = minWidth + 1;
     private const int infX = curX + 4;
     private const string cur = ">>> ";
-    private const string newLine = "\n\t\t";
     private int curY = minHeight;
     private int curIndex = 0;
     private int curFrame = maxBillboardHeight;

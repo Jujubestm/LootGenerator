@@ -11,7 +11,7 @@ namespace LootGenerator.Handler;
 
 internal class LootHandler(IGoldService goldService, IGemstoneService gemstoneService) : ILootHandler
 {
-    public event EventHandler<string> NewLoot;
+    public event EventHandler<string>? NewLoot;
 
     public void GenerateGold(ChallengeRating cr)
     {

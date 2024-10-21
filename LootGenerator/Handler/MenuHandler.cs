@@ -9,7 +9,7 @@ namespace LootGenerator.Handler;
 
 internal class MenuHandler() : IMenuHandler
 {
-    public event EventHandler<ConsoleKey> KeyPress;
+    public event EventHandler<ConsoleKey>? KeyPress;
 
     public void StartPolling()
     {
