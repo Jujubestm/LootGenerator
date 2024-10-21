@@ -92,6 +92,10 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
                 }
             }
         }
+        for (int i = 0; i < 120; i++)
+        {
+            Console.WriteLine();
+        }
         return Task.CompletedTask;
     }
 
