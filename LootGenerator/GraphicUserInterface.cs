@@ -100,6 +100,10 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
         Console.Title = "Loot Generator";
         Console.SetWindowSize(120, 30);
         Console.CursorVisible = false;
+        for (int i = 0; i < 120; i++)
+        {
+            Console.WriteLine();
+        }
         Console.SetCursorPosition(0, 0);
         for (var i = 0; i < 29; i++)
         {
