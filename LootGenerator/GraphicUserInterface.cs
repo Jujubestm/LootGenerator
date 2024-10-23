@@ -23,14 +23,16 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
         MainMenu,
         GenerateLoot,
         GenerateGold,
-        GenerateGemstone
+        GenerateGemstone,
+        WritingMenu
     }
 
     private Menu currentMenu = Menu.MainMenu;
     private readonly List<string> mainMenu = ["Main Menu:", "Generate Loot", "Exit"];
-    private readonly List<string> lootMenu = ["Loot Menu:", "Generate Gold", "Generate Gemstone", "Back"];
+    private readonly List<string> lootMenu = ["Loot Menu:", "Kill Monsters", "Generate Gold", "Generate Gemstone", "Back"];
     private readonly List<string> goldMenu = ["Choose CR:", "0 - 4", "5 - 10", "11 - 16", "17+"];
     private readonly List<string> gemstoneMenu = ["Choose Tier:", "1", "2", "3", "4", "5", "6"];
+    private readonly List<string> writingMenu = ["Number of monsters to kill | ESC to go back ; ENTER to validate", "1"];
     private bool toggle = false;
     private bool lastKey = false;
     private const int maxWidth = 114;
@@ -50,6 +52,9 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
     private int curFrame = maxBillboardHeight;
     private int billboardIndex = 0;
     private readonly string[] billboard = new string[maxBillboardHeight];
+    private int keyVal = 1;
+    private bool hasChosenNumber = false;
+    private string monsterToKill = "";
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -87,6 +92,10 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
 
                     case Menu.GenerateGemstone:
                         _menuStates.GenerateGemstone(_key);
+                        break;
+
+                    case Menu.WritingMenu:
+                        _menuStates.WritingMenu(_key);
                         break;
                 }
             }
@@ -300,16 +309,23 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
                     switch (_gui.curIndex)
                     {
                         case 0:
+                            _gui.currentMenu = Menu.WritingMenu;
+                            _gui.keyVal = 1;
+                            Console.CursorVisible = true;
+                            _gui.MenuBuilder(_gui.writingMenu);
+                            break;
+
+                        case 1:
                             _gui.currentMenu = Menu.GenerateGold;
                             _gui.MenuBuilder(_gui.goldMenu);
                             break;
 
-                        case 1:
+                        case 2:
                             _gui.currentMenu = Menu.GenerateGemstone;
                             _gui.MenuBuilder(_gui.gemstoneMenu);
                             break;
 
-                        case 2:
+                        case 3:
                             _gui.currentMenu = Menu.MainMenu;
                             _gui.MenuBuilder(_gui.mainMenu);
                             break;
@@ -401,6 +417,142 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
                         case 5:
                             _gui._lootHandler.GenerateGemstone(GemstoneTier.Tier6);
                             break;
+                    }
+                    break;
+            }
+        }
+
+        public void WritingMenu(ConsoleKey key)
+        {
+            switch (key)
+            {
+                case ConsoleKey.Escape:
+                    _gui.currentMenu = Menu.GenerateLoot;
+                    Console.CursorVisible = false;
+                    _gui.MenuBuilder(_gui.lootMenu);
+                    break;
+
+                case ConsoleKey.Backspace:
+                    if (!_gui.hasChosenNumber)
+                    {
+                        if (_gui.keyVal > 0)
+                        {
+                            _gui.keyVal /= 10;
+                            Console.Write("\b \b");
+                            if (_gui.keyVal == 0)
+                            {
+                                Console.Write("0");
+                                Console.SetCursorPosition(infX, minHeight + 1);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (_gui.monsterToKill.Length > 0)
+                        {
+                            _gui.monsterToKill = _gui.monsterToKill[..^1];
+                            Console.Write("\b \b");
+                        }
+                    }
+
+                    break;
+
+                case ConsoleKey.Enter:
+                    if (!_gui.hasChosenNumber)
+                    {
+                        if (_gui.keyVal > 0)
+                        {
+                            _gui.hasChosenNumber = true;
+                            Console.SetCursorPosition(infX, minWidth + 2);
+                            Console.Write("Monster to kill | vampire spawn ; bandit captain");
+                            _gui.SetCursorPos(minHeight, 4);
+                        }
+                    }
+                    else
+                    {
+                        if (_gui.monsterToKill.Length > 0)
+                        {
+                            _gui.ToBillboard(_gui.monsterToKill);
+                            _gui.hasChosenNumber = false;
+                            _gui.monsterToKill = "";
+                            _gui.keyVal = 1;
+                            _gui.MenuBuilder(_gui.writingMenu);
+                        }
+                    }
+                    break;
+
+                case ConsoleKey.D0:
+                case ConsoleKey.D1:
+                case ConsoleKey.D2:
+                case ConsoleKey.D3:
+                case ConsoleKey.D4:
+                case ConsoleKey.D5:
+                case ConsoleKey.D6:
+                case ConsoleKey.D7:
+                case ConsoleKey.D8:
+                case ConsoleKey.D9:
+                    if (!_gui.hasChosenNumber)
+                    {
+                        if (_gui.keyVal == 0)
+                        {
+                            _gui.keyVal = (int)key - 48;
+                            if (_gui.keyVal > 0)
+                            {
+                                Console.Write(_gui.keyVal);
+                            }
+                        }
+                        else
+                        {
+                            _gui.keyVal = (_gui.keyVal * 10) + ((int)key - 48);
+                            if (_gui.keyVal >= 10000)
+                            {
+                                _gui.keyVal = 10000;
+                                Console.SetCursorPosition(infX, minHeight + 1);
+                                Console.Write("10000");
+                            }
+                            else
+                            {
+                                Console.Write((char)(int)(key));
+                            }
+                        }
+                    }
+
+                    break;
+
+                case ConsoleKey.Q:
+                case ConsoleKey.W:
+                case ConsoleKey.E:
+                case ConsoleKey.R:
+                case ConsoleKey.T:
+                case ConsoleKey.Y:
+                case ConsoleKey.U:
+                case ConsoleKey.I:
+                case ConsoleKey.O:
+                case ConsoleKey.P:
+                case ConsoleKey.A:
+                case ConsoleKey.S:
+                case ConsoleKey.D:
+                case ConsoleKey.F:
+                case ConsoleKey.G:
+                case ConsoleKey.H:
+                case ConsoleKey.J:
+                case ConsoleKey.K:
+                case ConsoleKey.L:
+                case ConsoleKey.Z:
+                case ConsoleKey.X:
+                case ConsoleKey.C:
+                case ConsoleKey.V:
+                case ConsoleKey.B:
+                case ConsoleKey.N:
+                case ConsoleKey.M:
+                case ConsoleKey.Spacebar:
+                    if (_gui.hasChosenNumber)
+                    {
+                        if (_gui.monsterToKill.Length < 60)
+                        {
+                            _gui.monsterToKill += ((char)(int)(key)).ToString().ToLower();
+                            Console.Write(((char)(int)(key)).ToString().ToLower());
+                        }
                     }
                     break;
             }
