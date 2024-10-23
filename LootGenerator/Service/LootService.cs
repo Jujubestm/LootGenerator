@@ -50,7 +50,7 @@ internal class LootService(IDiceService diceService, IGoldService goldService, I
             gold = null;
         }
 
-        if (monster.GemTier != GemstoneTier.None)
+        if (monster.GemTier != GemstoneTier.None && monster.GemOdds >= _diceService.Roll(1, 100))
         {
             gemstone = _gemstoneService.Generate(monster.GemTier);
         }
