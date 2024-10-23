@@ -464,7 +464,7 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
                         {
                             _gui.hasChosenNumber = true;
                             Console.SetCursorPosition(infX, minWidth + 2);
-                            Console.Write("Monster to kill | vampire spawn ; bandit captain");
+                            Console.Write("Monster to kill, only letters | strahds animated armor ");
                             _gui.SetCursorPos(minHeight, 4);
                         }
                     }
