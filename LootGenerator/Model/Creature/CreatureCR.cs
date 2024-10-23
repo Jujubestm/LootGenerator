@@ -74,5 +74,7 @@ public enum ChallengeRating
 
     OneQuarter,
 
-    OneHalf
+    OneHalf,
+
+    None
 }

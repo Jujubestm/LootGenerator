@@ -15,4 +15,6 @@ internal interface ILootHandler
     public void GenerateGold(ChallengeRating cr);
 
     public void GenerateGemstone(GemstoneTier tier);
+
+    public void GenerateLoot(int monsterCount, IMonster monster);
 }

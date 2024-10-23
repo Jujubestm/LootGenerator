@@ -125,7 +125,9 @@ public enum GemstoneTier
 
     Tier5 = 1000,
 
-    Tier6 = 5000
+    Tier6 = 5000,
+
+    None = 0
 }
 
 internal class Gemstone(GemstoneType type, GemstoneTier tier)

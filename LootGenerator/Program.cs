@@ -16,6 +16,7 @@ internal static class Program
                 services.AddSingleton<IDiceService, DiceService>();
                 services.AddSingleton<IGoldService, GoldService>();
                 services.AddSingleton<IGemstoneService, GemstoneService>();
+                services.AddSingleton<ILootService, LootService>();
                 services.AddSingleton<ILootHandler, LootHandler>();
                 services.AddSingleton<IMenuHandler, MenuHandler>();
                 services.AddHostedService<GraphicUserInterface>();
