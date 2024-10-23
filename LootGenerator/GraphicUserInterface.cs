@@ -24,7 +24,7 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
         GenerateLoot,
         GenerateGold,
         GenerateGemstone,
-        WritingMenu
+        KillMonster
     }
 
     private Menu currentMenu = Menu.MainMenu;
@@ -32,7 +32,7 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
     private readonly List<string> lootMenu = ["Loot Menu:", "Kill Monsters", "Generate Gold", "Generate Gemstone", "Back"];
     private readonly List<string> goldMenu = ["Choose CR:", "0 - 4", "5 - 10", "11 - 16", "17+"];
     private readonly List<string> gemstoneMenu = ["Choose Tier:", "1", "2", "3", "4", "5", "6"];
-    private readonly List<string> writingMenu = ["Number of monsters to kill | ESC to go back ; ENTER to validate", "1"];
+    private readonly List<string> killMonster = ["Number of monsters to kill | ESC to go back ; ENTER to validate", "1"];
     private bool toggle = false;
     private bool lastKey = false;
     private const int maxWidth = 114;
@@ -94,8 +94,8 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
                         _menuStates.GenerateGemstone(_key);
                         break;
 
-                    case Menu.WritingMenu:
-                        _menuStates.WritingMenu(_key);
+                    case Menu.KillMonster:
+                        _menuStates.KillMonster(_key);
                         break;
                 }
             }
@@ -309,10 +309,9 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
                     switch (_gui.curIndex)
                     {
                         case 0:
-                            _gui.currentMenu = Menu.WritingMenu;
-                            _gui.keyVal = 1;
+                            _gui.currentMenu = Menu.KillMonster;
                             Console.CursorVisible = true;
-                            _gui.MenuBuilder(_gui.writingMenu);
+                            _gui.MenuBuilder(_gui.killMonster);
                             break;
 
                         case 1:
@@ -422,13 +421,16 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
             }
         }
 
-        public void WritingMenu(ConsoleKey key)
+        public void KillMonster(ConsoleKey key)
         {
             switch (key)
             {
                 case ConsoleKey.Escape:
                     _gui.currentMenu = Menu.GenerateLoot;
                     Console.CursorVisible = false;
+                    _gui.hasChosenNumber = false;
+                    _gui.monsterToKill = "";
+                    _gui.keyVal = 1;
                     _gui.MenuBuilder(_gui.lootMenu);
                     break;
 
@@ -476,7 +478,7 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
                             _gui.hasChosenNumber = false;
                             _gui.monsterToKill = "";
                             _gui.keyVal = 1;
-                            _gui.MenuBuilder(_gui.writingMenu);
+                            _gui.MenuBuilder(_gui.killMonster);
                         }
                     }
                     break;
