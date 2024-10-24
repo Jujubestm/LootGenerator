@@ -25,21 +25,34 @@ internal class LootHandler(IGoldService goldService, IGemstoneService gemstoneSe
 
     public void GenerateLoot(int monsterCount, IMonster monster)
     {
+        double totalgold = 0;
+        List<Gemstone> gemstones = new();
+        Dictionary<LootType, int> lootTypes = new();
         for (int i = 0; i < monsterCount; i++)
         {
             var loot = lootService.Generate(monster);
             if (loot.Item2 is not null)
             {
-                NewLoot?.Invoke(this, loot.Item2.ToString());
+                totalgold += loot.Item2.Amount;
             }
             if (loot.Item3 is not null)
             {
-                NewLoot?.Invoke(this, loot.Item3.ToString());
+                gemstones.Add(loot.Item3);
             }
             foreach (var item in loot.Item1)
             {
-                NewLoot?.Invoke(this, monster.Flavor[item]);
+                lootTypes[item] = lootTypes.TryGetValue(item, out int value) ? value + 1 : 1;
             }
+        }
+
+        NewLoot?.Invoke(this, goldService.Create(totalgold).ToString());
+        foreach (var gemstone in gemstones)
+        {
+            NewLoot?.Invoke(this, gemstone.ToString());
+        }
+        foreach (var lootType in lootTypes)
+        {
+            NewLoot?.Invoke(this, monster.Flavor[lootType.Key] + " x" + lootType.Value);
         }
     }
 }

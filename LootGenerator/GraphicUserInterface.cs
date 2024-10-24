@@ -1,5 +1,6 @@
 ﻿using LootGenerator.Interface;
 using LootGenerator.Model.Creature;
+using LootGenerator.Model.Creature.CreatureType;
 using LootGenerator.Model.Loot;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -474,7 +475,14 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
                     {
                         if (_gui.monsterToKill.Length > 0)
                         {
-                            _gui.ToBillboard(_gui.monsterToKill);
+                            Dictionary<LootType, string> flavor = new();
+
+                            flavor.Add(LootType.Head, "Skull");
+                            flavor.Add(LootType.Chest, "Rib Cage");
+                            flavor.Add(LootType.Hands, "Short Sword");
+                            flavor.Add(LootType.Pockets, "Lump of Coal");
+
+                            _gui._lootHandler.GenerateLoot(_gui.keyVal, new Monster(_gui.monsterToKill, new Undead(), flavor, ChallengeRating.One, GemstoneTier.Tier1, 3));
                             _gui.hasChosenNumber = false;
                             _gui.monsterToKill = "";
                             _gui.keyVal = 1;
