@@ -32,6 +32,7 @@ internal class LootHandler(IGoldService goldService, IGemstoneService gemstoneSe
         for (int i = 0; i < monsterCount; i++)
         {
             var loot = lootService.Generate(monster);
+
             if (loot.Item2 is not null)
             {
                 totalgold += loot.Item2.Amount;
@@ -63,6 +64,8 @@ internal class LootHandler(IGoldService goldService, IGemstoneService gemstoneSe
         if (monster is not null)
         {
             GenerateLoot(monsterCount, monster);
+            return;
         }
+        NewLoot?.Invoke(this, $"No entry for {monsterString}");
     }
 }
