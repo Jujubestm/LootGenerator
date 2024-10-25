@@ -44,9 +44,9 @@ internal class LootRepo
             Dictionary<string, Monster> dummy2 = new()
             {
                 {
-                    "Skeleton", new Monster()
+                    "skeleton", new Monster()
                     {
-                        Name = "Skeleton",
+                        Name = "skeleton",
                         CreatureType = CreatureTypeList.Undead,
                         Flavor = dummy,
                         CR = ChallengeRating.OneQuarter,
