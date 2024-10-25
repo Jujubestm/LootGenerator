@@ -16,5 +16,5 @@ internal interface ILootHandler
 
     public void GenerateGemstone(GemstoneTier tier);
 
-    public void GenerateLoot(int monsterCount, IMonster monster);
+    public void GenerateLoot(int monsterCount, string monsterString);
 }

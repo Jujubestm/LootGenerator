@@ -4,61 +4,57 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LootGenerator.Interface;
-using LootGenerator.Model.Creature;
 using LootGenerator.Model.Loot;
+using LootGenerator.Model.Creature;
+using LootGenerator.Repository;
 
 namespace LootGenerator.Service;
 
-internal class LootService(IDiceService diceService, IGoldService goldService, IGemstoneService gemstoneService) : ILootService
+internal class LootService(IDiceService diceService, IGoldService goldService, IGemstoneService gemstoneService, LootRepo lootRepo) : ILootService
 {
     private readonly IDiceService _diceService = diceService;
     private readonly IGoldService _goldService = goldService;
     private readonly IGemstoneService _gemstoneService = gemstoneService;
 
-    public Tuple<List<LootType>, Gold?, Gemstone?> Generate(IMonster monster)
+    public Tuple<List<LootType>, Gold?, Gemstone?> Generate(Monster monster)
     {
         List<LootType> loot = new();
-        Gold? gold;
-        Gemstone? gemstone;
+        Gold? gold = null;
+        Gemstone? gemstone = null;
+        ICreatureType? creatureType = lootRepo.GetCreatureType(monster.CreatureType);
 
-        if (monster.CreatureType.HeadOdds > 0 && monster.CreatureType.HeadOdds >= _diceService.Roll(1, 100))
+        if (creatureType is not null)
         {
-            loot.Add(LootType.Head);
-        }
+            if (creatureType.HeadOdds > 0 && creatureType.HeadOdds >= _diceService.Roll(1, 100))
+            {
+                loot.Add(LootType.Head);
+            }
 
-        if (monster.CreatureType.CheastOdds > 0 && monster.CreatureType.CheastOdds >= _diceService.Roll(1, 100))
-        {
-            loot.Add(LootType.Chest);
-        }
+            if (creatureType.CheastOdds > 0 && creatureType.CheastOdds >= _diceService.Roll(1, 100))
+            {
+                loot.Add(LootType.Chest);
+            }
 
-        if (monster.CreatureType.HandsOdds > 0 && monster.CreatureType.HandsOdds >= _diceService.Roll(1, 100))
-        {
-            loot.Add(LootType.Hands);
-        }
+            if (creatureType.HandsOdds > 0 && creatureType.HandsOdds >= _diceService.Roll(1, 100))
+            {
+                loot.Add(LootType.Hands);
+            }
 
-        if (monster.CreatureType.PocketsOdds > 0 && monster.CreatureType.PocketsOdds >= _diceService.Roll(1, 100))
-        {
-            loot.Add(LootType.Pockets);
-        }
+            if (creatureType.PocketsOdds > 0 && creatureType.PocketsOdds >= _diceService.Roll(1, 100))
+            {
+                loot.Add(LootType.Pockets);
+            }
 
-        if (monster.CR != ChallengeRating.None)
-        {
-            gold = _goldService.Generate(monster.CR);
-        }
-        else
-        {
-            gold = null;
-        }
+            if (monster.CR != ChallengeRating.None)
+            {
+                gold = _goldService.Generate(monster.CR);
+            }
 
-        if (monster.GemTier != GemstoneTier.None && monster.GemOdds >= _diceService.Roll(1, 100))
-        {
-            gemstone = _gemstoneService.Generate(monster.GemTier);
+            if (monster.GemTier != GemstoneTier.None && monster.GemOdds >= _diceService.Roll(1, 100))
+            {
+                gemstone = _gemstoneService.Generate(monster.GemTier);
+            }
         }
-        else
-        {
-            gemstone = null;
-        }
-
         return Tuple.Create(loot, gold, gemstone);
     }
 }

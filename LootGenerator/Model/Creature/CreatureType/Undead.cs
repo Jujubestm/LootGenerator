@@ -8,7 +8,7 @@ using LootGenerator.Model.Loot;
 
 namespace LootGenerator.Model.Creature.CreatureType;
 
-internal class Undead : ICreatureType
+internal class Undead : Interface.ICreatureType
 {
     public int HeadOdds => 30;
     public int CheastOdds => 30;

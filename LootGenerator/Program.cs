@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using LootGenerator.Interface;
 using LootGenerator.Handler;
 using LootGenerator.Service;
+using LootGenerator.Repository;
 
 namespace LootGenerator;
 
@@ -19,6 +20,7 @@ internal static class Program
                 services.AddSingleton<ILootService, LootService>();
                 services.AddSingleton<ILootHandler, LootHandler>();
                 services.AddSingleton<IMenuHandler, MenuHandler>();
+                services.AddSingleton<LootRepo>();
                 services.AddHostedService<GraphicUserInterface>();
             });
         var host = builder.Build();

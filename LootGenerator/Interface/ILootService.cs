@@ -11,5 +11,5 @@ namespace LootGenerator.Interface;
 
 internal interface ILootService
 {
-    public Tuple<List<LootType>, Gold?, Gemstone?> Generate(IMonster monster);
+    public Tuple<List<LootType>, Gold?, Gemstone?> Generate(Monster monster);
 }

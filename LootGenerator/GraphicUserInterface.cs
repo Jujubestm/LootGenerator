@@ -2,6 +2,7 @@
 using LootGenerator.Model.Creature;
 using LootGenerator.Model.Creature.CreatureType;
 using LootGenerator.Model.Loot;
+using LootGenerator.Repository;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,10 @@ using System.Threading.Tasks;
 
 namespace LootGenerator;
 
-internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLifetime, ILootHandler lootHandler, IMenuHandler menuHandler) : BackgroundService, IGraphicUserInterface
+internal class GraphicUserInterface(
+    IHostApplicationLifetime hostApplicationLifetime,
+    ILootHandler lootHandler,
+    IMenuHandler menuHandler) : BackgroundService, IGraphicUserInterface
 {
     private readonly IHostApplicationLifetime _hostApplicationLifetime = hostApplicationLifetime;
     private readonly ILootHandler _lootHandler = lootHandler;
@@ -482,7 +486,7 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
                             flavor.Add(LootType.Hands, "Short Sword");
                             flavor.Add(LootType.Pockets, "Lump of Coal");
 
-                            _gui._lootHandler.GenerateLoot(_gui.keyVal, new Monster(_gui.monsterToKill, new Undead(), flavor, ChallengeRating.One, GemstoneTier.Tier1, 3));
+                            _gui._lootHandler.GenerateLoot(_gui.keyVal, _gui.monsterToKill);
                             _gui.hasChosenNumber = false;
                             _gui.monsterToKill = "";
                             _gui.keyVal = 1;
@@ -556,13 +560,10 @@ internal class GraphicUserInterface(IHostApplicationLifetime hostApplicationLife
                 case ConsoleKey.N:
                 case ConsoleKey.M:
                 case ConsoleKey.Spacebar:
-                    if (_gui.hasChosenNumber)
+                    if (_gui.hasChosenNumber && _gui.monsterToKill.Length < 60)
                     {
-                        if (_gui.monsterToKill.Length < 60)
-                        {
-                            _gui.monsterToKill += ((char)(int)(key)).ToString().ToLower();
-                            Console.Write(((char)(int)(key)).ToString().ToLower());
-                        }
+                        _gui.monsterToKill += ((char)(int)(key)).ToString().ToLower();
+                        Console.Write(((char)(int)(key)).ToString().ToLower());
                     }
                     break;
             }
